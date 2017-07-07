@@ -3,13 +3,16 @@
   h2 Wish List
   p
   ul.list-items
-    li(v-for="(item,index) in items") {{ item.text }}
+    li(v-for="(item,index) in items")
       input(
         type="checkbox"
-        :id="'item'+ index")
-      label(:for="'item'+ index") {{ item }}
+        :id="'item'+ index"
+        :checked="item.done"
+        @click="toggleDone(index)"
+        )
+      label(:for="'item'+ index") {{ item.text }}
         span(
-         @click="items.splice(index, 1)"
+          @click="removeWish(index)"
         ) X
   .add-items 
     input(
@@ -27,16 +30,28 @@ export default {
   data () {
     return {
       newWishText: "",
-      items: [],
+      items: null,
     };
   },
-  // created(){
-  //   this.items = JSON.parse(localStorage.getItem("items")) || [] 
-  // },
+  created(){
+    this.items = JSON.parse(localStorage.getItem("items")) || [] 
+  },
   methods:{
     addNewWish() {
-      this.items.push(this.newWishText)
+      this.items.push({text:this.newWishText,done:false})
       this.newWishText = ""
+      this.changeLocalHistory()
+    },
+    changeLocalHistory() {
+      localStorage.setItem('items',JSON.stringify(this.items))
+    },
+    removeWish(index) {
+      this.items.splice(index, 1)
+      this.changeLocalHistory()
+    },
+    toggleDone(index) {
+      this.items[index].done = !this.items[index].done
+      this.changeLocalHistory()
     }
   }
 };
@@ -101,6 +116,15 @@ h2
         float: right
         display: inline-block
         margin-top: 3px
+        opacity: 0
+ 
+ .list-items
+  li
+    &:hover
+      span
+        opacity: 0.7
+        transition: all .2s ease-in-out;       
+        
       
 .list-items input 
   display: none
