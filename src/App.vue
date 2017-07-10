@@ -123,8 +123,7 @@ h2
     &:hover
       span
         opacity: 0.7
-        transition: all .2s ease-in-out;       
-        
+        transition: all .2s ease-in-out;           
       
 .list-items input 
   display: none
@@ -150,5 +149,4 @@ h2
   margin: 5px 0
   outline:0
   border:1px solid rgba(0,0,0,0.1)
-
 </style>
